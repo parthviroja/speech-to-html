@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Speech to Html : By Parth Viroja</title>
+		<meta name="author" content="Parth M. Viroja" />
+		<style type="text/css" media="screen">
+			* {
+				padding: 0;
+				margin: 0;
+				font-family: 'Verdana';
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				-ms-box-sizing: border-box;
+				-o-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+
+			body {
+				background-color: #efefef;
+				font-size:16px;
+			}
+
+			p{
+				line-height:2;
+			}
+
+			pre{
+				position: relative;
+				display: block;
+				background-color: #efefef;
+				margin:0px auto;
+				padding: 40px;
+			}
+
+			.page {
+				position: relative;
+				display:block;
+				padding: 40px;
+				background-color: #fff;
+				margin-left:50%;
+			}
+
+			pre *{
+				position:relative;
+				padding:20px;
+				display:block;
+				background-color: #fff000;
+				margin:6px auto;
+				color: #000;
+				text-shadow:0px 1px 1px rgba(0, 0, 0, 0.1);
+			}
+
+			.console{
+				position:fixed;
+				top:0;
+				left:0;
+				bottom: 0;
+				right:auto;
+				width:50%;
+				overflow:hidden;
+				overflow-y:auto;
+				background-color:#333;
+				box-shadow:0px 0px 10px rgba(0, 0, 0, 0.2);
+			}
+
+			.tag-list{display:block;height:100%;}
+			.tag-list li{display:block;padding:6px 16px;font-size:12px;color:#fff;}
+			.tag-list li:first-child{color:#ff0000;}
+
+		</style>
+		<script src="jquery.js"></script>
+		<script src="annyang.js"></script>
+		<script>
+			var tags = ["a","abbr","acronym","address","applet","area","article","aside","audio","b","base","basefont","bdi","bdo","big","blockquote","body","br","button","canvas","caption","center","cite","code","col","colgroup","datalist","dd","del","details","dfn","dialog","dir","div","dl","dt","em","embed","fieldset","figcaption","figure","font","footer","form","frame","frameset","h1","h2","h3","h4","h5","h6","head","header","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","menu","menuitem","meta","meter","nav","noframes","noscript","object","ol","optgroup","option","output","p","param","pre","progress","q","rp","rt","ruby","s","samp","script","section","select","small","source","span","strike","strong","style","sub","summary","sup","table","tbody","td","textarea","tfoot","th","thead","time","title","tr","track","tt","u","ul","var","video","wbr"];
+			
+			if (annyang) {
+
+				annyang.addCallback('error', function () {
+					console.log(this);
+				});
+
+				annyang.addCallback('result', function ( phrases) {
+					//console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+					$('.tag-list').prepend($('<li/>').text(phrases[0]));
+				});
+
+				annyang.addCallback('resultMatch', function (userSaid, commandText, phrases) {
+					console.log(userSaid); // sample output: 'hello'
+					console.log(commandText); // sample output: 'hello (there)'
+					console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+				});
+
+				annyang.addCallback('resultNoMatch', function ( phrases) {
+					console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+				});
+
+				var commands = { ':tag' : function(tag){
+						tag = tag.toLowerCase();
+						$('.tag-list').prepend($('<li/>').text(tag));
+						if( tags.indexOf(tag,1) !== -1){
+							$('.pre').prepend($('<' + tag + '>' + tag + '</' +  tag  + '>'));
+						}else{
+							//console.log("Tag not found : " + tag);
+						}
+					}
+				};
+
+				// Let's define our first command. First the text we expect, and then the function it should call
+				
+				// Add our commands to annyang
+				annyang.addCommands(commands);
+				annyang.trigger('Time for some thrilling heroics');
+				annyang.trigger(['Time for some thrilling heroics', 'Time for some thrilling aerobics']);
+				// pass local context to a global function called notConnected
+				// annyang.addCallback('errorNetwork', notConnected, this);
+				// Start listening. You can call this here, or attach this call to an event, button, etc.
+				annyang.start({ autoRestart: true, continuous: true });
+			}
+		</script>
+	</head>
+	<body >
+		<div class="console">
+			<ul class="tag-list"></ul>
+		</div>
+		<div class="page">
+			<p>I'm responsible for Designing, Development and Customization of Magento2(CE&EE). I also handle development of compatible extensions and modules for magento framework.</p>
+			<pre class="pre"></pre>
+			<p>I was responsible for R&D of webapps using "Codeigniter", "MongoDB" and "Apache Solr", developed streaming server using Red5</p>
+			</div>
+	</body>
+</html>
